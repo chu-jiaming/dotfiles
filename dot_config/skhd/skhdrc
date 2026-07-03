@@ -1,0 +1,229 @@
+#  NOTE(koekeishiya): A list of all built-in modifier and literal keywords can
+#                     be found at https://github.com/koekeishiya/skhd/issues/1
+#
+#                     A hotkey is written according to the following rules:
+#
+#                       hotkey       = <mode> '<' <action> | <action>
+#
+#                       mode         = 'name of mode' | <mode> ',' <mode>
+#
+#                       action       = <keysym> '[' <proc_map_lst> ']' | <keysym> '->' '[' <proc_map_lst> ']'
+#                                      <keysym> ':' <command>          | <keysym> '->' ':' <command>
+#                                      <keysym> ';' <mode>             | <keysym> '->' ';' <mode>
+#
+#                       keysym       = <mod> '-' <key> | <key>
+#
+#                       mod          = 'modifier keyword' | <mod> '+' <mod>
+#
+#                       key          = <literal> | <keycode>
+#
+#                       literal      = 'single letter or built-in keyword'
+#
+#                       keycode      = 'apple keyboard kVK_<Key> values (0x3C)'
+#
+#                       proc_map_lst = * <proc_map>
+#
+#                       proc_map     = <string> ':' <command> | <string>     '~' |
+#                                      '*'      ':' <command> | '*'          '~'
+#
+#                       string       = '"' 'sequence of characters' '"'
+#
+#                       command      = command is executed through '$SHELL -c' and
+#                                      follows valid shell syntax. if the $SHELL environment
+#                                      variable is not set, it will default to '/bin/bash'.
+#                                      when bash is used, the ';' delimeter can be specified
+#                                      to chain commands.
+#
+#                                      to allow a command to extend into multiple lines,
+#                                      prepend '\' at the end of the previous line.
+#
+#                                      an EOL character signifies the end of the bind.
+#
+#                       ->           = keypress is not consumed by skhd
+#
+#                       *            = matches every application not specified in <proc_map_lst>
+#
+#                       ~            = application is unbound and keypress is forwarded per usual, when specified in a <proc_map>
+#
+#  NOTE(koekeishiya): A mode is declared according to the following rules:
+#
+#                       mode_decl = '::' <name> '@' ':' <command> | '::' <name> ':' <command> |
+#                                   '::' <name> '@'               | '::' <name>
+#
+#                       name      = desired name for this mode,
+#
+#                       @         = capture keypresses regardless of being bound to an action
+#
+#                       command   = command is executed through '$SHELL -c' and
+#                                   follows valid shell syntax. if the $SHELL environment
+#                                   variable is not set, it will default to '/bin/bash'.
+#                                   when bash is used, the ';' delimeter can be specified
+#                                   to chain commands.
+#
+#                                   to allow a command to extend into multiple lines,
+#                                   prepend '\' at the end of the previous line.
+#
+#                                   an EOL character signifies the end of the bind.
+
+# add an on_enter command to the default mode
+# :: default : yabai -m config active_window_border_color 0xff775759
+#
+# defines a new mode 'test' with an on_enter command, that captures keypresses
+# :: test @ : yabai -m config active_window_border_color 0xff24ccaa
+#
+# from 'default' mode, activate mode 'test'
+# cmd - x ; test
+#
+# from 'test' mode, activate mode 'default'
+# test < cmd - x ; default
+#
+# launch a new terminal instance when in either 'default' or 'test' mode
+# default, test < cmd - return : open -na /Applications/Terminal.app
+
+# application specific bindings
+#
+# cmd - n [
+#     "kitty"       : echo "hello kitty"
+#     *             : echo "hello everyone"
+#     "qutebrowser" : echo "hello qutebrowser"
+#     "terminal"    ~
+#     "finder"      : false
+# ]
+
+# specify a file that should be included as an additional config-file.
+# treated as an absolutepath if the filename begins with '/' otherwise
+# the file is relative to the path of the config-file it was loaded from.
+#
+# .load "/Users/Koe/.config/partial_skhdrc"
+# .load "partial_skhdrc"
+
+# prevent skhd from monitoring events for specific applications.
+#
+# .blacklist [
+#    "kitty"
+#    "terminal"
+#    "qutebrowser"
+# ]
+
+# This skhd configuration assumes $SHELL is /bin/zsh.
+
+# ╭──────────────────────────────────────────────────────────╮
+
+# │                          SYSTEM                          │
+
+# ╰──────────────────────────────────────────────────────────╯
+
+ctrl + alt + cmd - y : yabai --restart-service
+ctrl + alt + cmd - s : skhd --restart-service
+ctrl + alt + cmd - t : true
+ctrl + alt + cmd - r : yabai --restart-service; skhd --restart-service
+
+# ╭──────────────────────────────────────────────────────────╮
+
+# │                         DISPLAY                          │
+
+# ╰──────────────────────────────────────────────────────────╯
+
+# focus display
+
+ctrl + alt - tab : yabai -m display --focus recent
+ctrl + cmd - 1 : yabai -m display --focus 1
+ctrl + cmd - 2 : yabai -m display --focus 2
+ctrl + cmd - 3 : yabai -m display --focus 3
+ctrl + cmd - 4 : yabai -m display --focus 4
+ctrl + cmd - 5 : yabai -m display --focus 5
+ctrl + cmd - 6 : yabai -m display --focus 6
+ctrl + cmd - 7 : yabai -m display --focus 7
+ctrl + cmd - 8 : yabai -m display --focus 8
+ctrl + cmd - 9 : yabai -m display --focus 9
+ctrl + cmd - 0 : yabai -m display --focus 10
+
+# ╭──────────────────────────────────────────────────────────╮
+
+# │                          WINDOW                          │
+
+# ╰──────────────────────────────────────────────────────────╯
+
+# focus window
+
+ctrl + cmd - h : yabai -m window --focus west
+ctrl + cmd - j : yabai -m window --focus south
+ctrl + cmd - k : yabai -m window --focus north
+ctrl + cmd - l : yabai -m window --focus east
+
+# move by direction
+
+ctrl + alt - h : if [[ "$(yabai -m query --windows --window | jq -r '."is-floating"')" == "true" ]]; then yabai -m window --grid 1:2:0:0:1:1; else yabai -m window --swap west; fi
+ctrl + alt - j : if [[ "$(yabai -m query --windows --window | jq -r '."is-floating"')" == "true" ]]; then yabai -m window --grid 2:1:0:1:1:1; else yabai -m window --swap south; fi
+ctrl + alt - k : if [[ "$(yabai -m query --windows --window | jq -r '."is-floating"')" == "true" ]]; then yabai -m window --grid 2:1:0:0:1:1; else yabai -m window --swap north; fi
+ctrl + alt - l : if [[ "$(yabai -m query --windows --window | jq -r '."is-floating"')" == "true" ]]; then yabai -m window --grid 1:2:1:0:1:1; else yabai -m window --swap east; fi
+
+# move to space
+
+ctrl + alt - 1 : id=$(yabai -m query --windows --window | jq '.id'); yabai -m window "$id" --space 1
+ctrl + alt - 2 : id=$(yabai -m query --windows --window | jq '.id'); yabai -m window "$id" --space 2
+ctrl + alt - 3 : id=$(yabai -m query --windows --window | jq '.id'); yabai -m window "$id" --space 3
+ctrl + alt - 4 : id=$(yabai -m query --windows --window | jq '.id'); yabai -m window "$id" --space 4
+ctrl + alt - 5 : id=$(yabai -m query --windows --window | jq '.id'); yabai -m window "$id" --space 5
+ctrl + alt - 6 : id=$(yabai -m query --windows --window | jq '.id'); yabai -m window "$id" --space 6
+ctrl + alt - 7 : id=$(yabai -m query --windows --window | jq '.id'); yabai -m window "$id" --space 7
+ctrl + alt - 8 : id=$(yabai -m query --windows --window | jq '.id'); yabai -m window "$id" --space 8
+ctrl + alt - 9 : id=$(yabai -m query --windows --window | jq '.id'); yabai -m window "$id" --space 9
+ctrl + alt - 0 : id=$(yabai -m query --windows --window | jq '.id'); yabai -m window "$id" --space 10
+
+# move to next display
+
+alt + cmd - tab : id=$(yabai -m query --windows --window | jq '.id'); (yabai -m window "$id" --display next || yabai -m window "$id" --display prev); yabai -m window "$id" --focus
+
+# resize
+
+ctrl + alt - down : yabai -m window --resize bottom:0:100 2>/dev/null || yabai -m window --resize top:0:100 2>/dev/null
+ctrl + alt - left : yabai -m window --resize right:-100:0 2>/dev/null || yabai -m window --resize left:-100:0 2>/dev/null
+ctrl + alt - right : yabai -m window --resize right:100:0 2>/dev/null || yabai -m window --resize left:100:0 2>/dev/null
+ctrl + alt - up : yabai -m window --resize bottom:0:-100 2>/dev/null || yabai -m window --resize top:0:-100 2>/dev/null
+
+# almost maximize
+
+ctrl + alt - return : yabai -m window --grid 20:20:1:1:18:18
+
+# center
+
+ctrl + alt - x : width=$(yabai -m query --windows --window | jq '.frame.w'); height=$(yabai -m query --windows --window | jq '.frame.h'); display_id=$(yabai -m query --windows --window | jq '.display'); display_width=$(yabai -m query --displays --display "$display_id" | jq '.frame.w'); display_height=$(yabai -m query --displays --display "$display_id" | jq '.frame.h'); display_x=$(yabai -m query --displays --display "$display_id" | jq '.frame.x'); display_y=$(yabai -m query --displays --display "$display_id" | jq '.frame.y'); position_x=$(echo "scale=4; ($display_x + $display_width / 2 - $width / 2)" | bc); position_y=$(echo "scale=4; ($display_y + $display_height / 2 - $height / 2)" | bc); yabai -m window --move abs:"$position_x":"$position_y"
+
+# maximize
+
+ctrl + alt - f : if [[ "$(yabai -m query --windows --window | jq -r '."is-floating"')" == "true" ]]; then yabai -m window --grid 1:1:0:0:1:1; else yabai -m window --toggle zoom-fullscreen; fi
+
+# rotate
+
+ctrl + alt - r : WIN=$(yabai -m query --windows --window first | jq '.id'); while true; do yabai -m window "$WIN" --swap next &>/dev/null; [[ $? -eq 1 ]] && break; done
+
+# balance
+
+ctrl + alt - e : yabai -m space --balance
+
+# change split
+
+ctrl + alt - o : yabai -m window --toggle split
+
+# toggle floating
+
+ctrl + alt - t : yabai -m window --toggle float; if [[ "$(yabai -m query --windows --window | jq -r '."is-floating"')" == "true" ]]; then width=$(yabai -m query --windows --window | jq '.frame.w'); height=$(yabai -m query --windows --window | jq '.frame.h'); display_id=$(yabai -m query --windows --window | jq '.display'); display_width=$(yabai -m query --displays --display "$display_id" | jq '.frame.w'); display_height=$(yabai -m query --displays --display "$display_id" | jq '.frame.h'); display_x=$(yabai -m query --displays --display "$display_id" | jq '.frame.x'); display_y=$(yabai -m query --displays --display "$display_id" | jq '.frame.y'); position_x=$(echo "scale=4; ($display_x + $display_width / 2 - $width / 2)" | bc); position_y=$(echo "scale=4; ($display_y + $display_height / 2 - $height / 2)" | bc); yabai -m window --move abs:"$position_x":"$position_y"; fi
+
+# make larger
+
+# https://github.com/koekeishiya/skhd/issues/1#issue-248494406
+
+ctrl + alt - 0x18 : width=$(yabai -m query --windows --window | jq '.frame.w'); height=$(yabai -m query --windows --window | jq '.frame.h'); new_width=$(echo "scale=4; $width + 50" | bc); new_height=$(echo "scale=4; $height + 50" | bc); yabai -m window --resize abs:"$new_width":"$new_height"
+ctrl + alt - 0x1B : width=$(yabai -m query --windows --window | jq '.frame.w'); height=$(yabai -m query --windows --window | jq '.frame.h'); new_width=$(echo "scale=4; $width - 50" | bc); new_height=$(echo "scale=4; $height - 50" | bc); yabai -m window --resize abs:"$new_width":"$new_height"
+
+# ╭──────────────────────────────────────────────────────────╮
+
+# │                           APPS                           │
+
+# ╰──────────────────────────────────────────────────────────╯
+
+alt - t : open -a ghostty
+ctrl + shift - m : open -a Music
+alt - w : open -a WeChat
+alt - f : open -a Finder
