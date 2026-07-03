@@ -6,6 +6,7 @@
 
 chezmoi edit ~/.zshrc
 chezmoi diff
+chezmoi apply -nv
 chezmoi apply -v
 chezmoi cd
 git add .
