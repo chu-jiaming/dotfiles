@@ -4,6 +4,7 @@
 
 ## Daily workflow
 
+```zsh
 chezmoi edit ~/.zshrc
 chezmoi diff
 chezmoi apply -nv
@@ -12,3 +13,4 @@ chezmoi cd
 git add .
 git commit -m "Update dotfiles"
 git push
+```
