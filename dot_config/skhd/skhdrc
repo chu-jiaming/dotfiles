@@ -165,6 +165,13 @@ ctrl + alt + cmd - j : yabai -m window --warp south
 ctrl + alt + cmd - k : yabai -m window --warp north
 ctrl + alt + cmd - l : yabai -m window --warp east
 
+
+# ╭──────────────────────────────────────────────────────────╮
+
+# │                          SPACE                           │
+
+# ╰──────────────────────────────────────────────────────────╯
+
 # move to space
 
 ctrl + alt - 1 : id=$(yabai -m query --windows --window | jq '.id'); yabai -m window "$id" --space 1
@@ -177,6 +184,22 @@ ctrl + alt - 7 : id=$(yabai -m query --windows --window | jq '.id'); yabai -m wi
 ctrl + alt - 8 : id=$(yabai -m query --windows --window | jq '.id'); yabai -m window "$id" --space 8
 ctrl + alt - 9 : id=$(yabai -m query --windows --window | jq '.id'); yabai -m window "$id" --space 9
 ctrl + alt - 0 : id=$(yabai -m query --windows --window | jq '.id'); yabai -m window "$id" --space 10
+
+# pre next Space
+alt - left  : yabai -m space --focus prev
+alt - right : yabai -m space --focus next
+
+# specific Space
+alt - 1 : yabai -m space --focus 1
+alt - 2 : yabai -m space --focus 2
+alt - 3 : yabai -m space --focus 3
+alt - 4 : yabai -m space --focus 4
+alt - 5 : yabai -m space --focus 5
+alt - 6 : yabai -m space --focus 6
+
+
+# 在当前和最近使用的 Space 间来回切换
+alt - tab : yabai -m space --focus recent
 
 # move to next display
 
