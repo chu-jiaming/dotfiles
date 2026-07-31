@@ -14,5 +14,8 @@ setopt AUTO_MENU
 [[ -r "$HOME/.config/secrets/load_api.zsh" ]] && \
   source "$HOME/.config/secrets/load_api.zsh"
 
+# Set up fzf key bindings and fuzzy completion
+source <(fzf --zsh)
+
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
