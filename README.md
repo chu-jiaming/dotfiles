@@ -1,39 +1,78 @@
-# Dotfiles
+# 🛠️ Dotfiles
 
-> This repository is maintained by [chezmoi](https://github.com/twpayne/chezmoi).
+Personal dotfiles for macOS, managed with [GNU Stow](https://www.gnu.org/software/stow/).
 
-![terminal](./assets/terminal.png)
+<p align="left">
+  <img src="https://img.shields.io/badge/macOS-000000?style=flat-square&logo=apple&logoColor=white" />
+  <img src="https://img.shields.io/badge/GNU%20Stow-2C2C2C?style=flat-square&logo=gnu&logoColor=white" />
+  <img src="https://img.shields.io/badge/Zsh-F15A24?style=flat-square&logo=zsh&logoColor=white" />
+  <img src="https://img.shields.io/badge/Yabai-3A3A3A?style=flat-square" />
+  <img src="https://img.shields.io/badge/Ghostty-282C34?style=flat-square" />
+</p>
 
-## Daily workflow
+![Terminal](./assets/terminal.png)
+
+## 📦 Setup
 
 ```zsh
-chezmoi edit ~/.zshrc
-chezmoi diff
-chezmoi apply -nv
-chezmoi apply -v
-chezmoi cd
-git add .
-git commit -m "Update dotfiles"
+brew install stow
+
+git clone git@github.com:chu-jiaming/dotfiles.git ~/dotfiles
+cd ~/dotfiles
+
+./install.sh
+````
+
+The repository mirrors `$HOME` and Stow creates symlinks automatically.
+
+```text
+~/dotfiles/.zshrc
+        ↓
+~/.zshrc
+
+~/dotfiles/.config/yabai/yabairc
+        ↓
+~/.config/yabai/yabairc
+```
+
+## 🔄 Daily Workflow
+
+Edit configuration files directly from `$HOME`:
+
+```zsh
+vim ~/.config/yabai/yabairc
+```
+
+Changes are reflected immediately in `~/dotfiles` through symlinks.
+
+```zsh
+cd ~/dotfiles
+
+git diff
+git add -A
+git commit -m "update yabai config"
 git push
 ```
 
-## Shortcut Key
+---
 
-### 1. 系统与服务
+# ⌨️ Shortcut Keys
+
+## ⚙️ 1. 系统与服务
 
 | 快捷键 | 操作 |
-|---|---|
+| ------ | ---------------------- |
 | `⌃⌥⌘Y` | 重启 Yabai 服务 |
 | `⌃⌥⌘S` | 重启 skhd 服务 |
 | `⌃⌥⌘T` | 占位操作（当前为 `true`，无实际效果） |
 | `⌃⌥⌘R` | 同时重启 Yabai 与 skhd |
 
-### 2. 窗口管理（Yabai）
+## 🪟 2. 窗口管理（Yabai）
 
-#### 聚焦与移动
+### 🎯 聚焦与移动
 
 | 快捷键 | 操作 |
-|---|---|
+| --------------------------------- | ---------------------------------------- |
 | `⌃⌘H` / `⌃⌘J` / `⌃⌘K` / `⌃⌘L` | 分别聚焦左 / 下 / 上 / 右侧窗口 |
 | `⌃⌥H` / `⌃⌥J` / `⌃⌥K` / `⌃⌥L` | 平铺窗口：与左 / 下 / 上 / 右窗口交换位置；浮动窗口：移动到相应半屏位置 |
 | `⌃⌥⌘H` / `⌃⌥⌘J` / `⌃⌥⌘K` / `⌃⌥⌘L` | 将当前窗口 warp 到左 / 下 / 上 / 右侧窗口位置 |
@@ -41,10 +80,10 @@ git push
 | `⌃⌥0` | 将当前窗口移动到空间 10 |
 | `⌥⌘Tab` | 将当前窗口移动到下一台显示器；到末尾时循环到上一台，并聚焦该窗口 |
 
-#### 调整尺寸与布局
+### 📐 调整尺寸与布局
 
 | 快捷键 | 操作 |
-|---|---|
+| ---------- | --------------------------------- |
 | `⌃⌥↓` | 向下扩大窗口 100 px；必要时改为向下侧边界调整 |
 | `⌃⌥←` | 向左缩小窗口 100 px |
 | `⌃⌥→` | 向右扩大窗口 100 px |
@@ -59,29 +98,29 @@ git push
 | `⌃⌥=` | 当前窗口宽、高各增加 50 px（配置中为物理键码 `0x18`） |
 | `⌃⌥-` | 当前窗口宽、高各减少 50 px（配置中为物理键码 `0x1B`） |
 
-### 3. 应用启动
+## 🚀 3. 应用启动
 
 | 快捷键 | 操作 |
-|---|---|
+| ----- | ---------- |
 | `⌥T` | 打开 Ghostty |
 | `⌃⇧M` | 打开 Music |
 | `⌥W` | 打开 WeChat |
 | `⌥F` | 打开 Finder |
 
-### 4. 鼠标窗口操作（Yabai）
+## 🖱️ 4. 鼠标窗口操作（Yabai）
 
 | 手势 | 操作 |
-|---|---|
+| -------------- | --------- |
 | `⌥` + 左键拖拽 | 移动窗口 |
 | `⌥` + 右键拖拽 | 调整窗口大小 |
 | 将窗口拖放到另一个平铺窗口上 | 交换两个窗口的位置 |
 
-### 5. Ghostty：分屏、标签页与配置
+## 👻 5. Ghostty
 
-#### 常用默认操作（macOS）
+### 🧩 分屏、标签页与配置
 
 | 快捷键 / 入口 | 操作 |
-|---|---|
+| ----------------------------- | ------------------------------------- |
 | `⌘D` | 在右侧新建分屏 |
 | `⇧⌘D` | 在下方新建分屏 |
 | `⌘⌥←` / `⌘⌥↓` / `⌘⌥↑` / `⌘⌥→` | 聚焦左 / 下 / 上 / 右侧分屏 |
@@ -93,3 +132,29 @@ git push
 | `⌘T` | 新建标签页 |
 | `⇧⌘P` | 打开命令面板；可搜索分屏、关闭、缩放、均分等操作 |
 | `⇧⌘,` | 重新加载 Ghostty 配置 |
+
+---
+
+## 📁 Structure
+
+```text
+~/dotfiles
+├── .config
+│   ├── fastfetch
+│   ├── ghostty
+│   ├── secrets
+│   ├── sioyek
+│   ├── skhd
+│   ├── starship.toml
+│   └── yabai
+├── .gitconfig
+├── .stow-local-ignore
+├── .zshrc
+├── install.sh
+└── README.md
+```
+
+## 🔗 Managed With
+
+* [GNU Stow](https://www.gnu.org/software/stow/)
+* [Git](https://git-scm.com/)
