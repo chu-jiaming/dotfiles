@@ -1,0 +1,13 @@
+# Git
+\.git
+\.gitignore
+\.gitmodules
+
+# Repository documentation
+^/README.*
+
+# Repository-only assets
+^/assets
+
+# Bootstrap script
+^/install\.sh$
