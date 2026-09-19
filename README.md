@@ -21,7 +21,7 @@ git clone git@github.com:chu-jiaming/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 
 ./install.sh
-````
+```
 
 The repository mirrors `$HOME` and Stow creates symlinks automatically.
 
@@ -37,21 +37,42 @@ The repository mirrors `$HOME` and Stow creates symlinks automatically.
 
 ## 🔄 Daily Workflow
 
-Edit configuration files directly from `$HOME`:
-
-```zsh
-vim ~/.config/yabai/yabairc
-```
-
-Changes are reflected immediately in `~/dotfiles` through symlinks.
+Treat `~/dotfiles` as the source of truth, especially when adding, deleting, or
+renaming files. Existing files can also be edited through their symlinks in
+`$HOME`, but structural changes should be made in the repository.
 
 ```zsh
 cd ~/dotfiles
 
+# Edit, add, delete, or rename configuration files here.
+vim .config/yabai/yabairc
+```
+
+Run the installer after structural changes. It uses `stow --restow` to create
+links for new files and remove obsolete managed links. It does not overwrite
+unrelated regular files; Stow reports a conflict instead.
+
+```zsh
+./install.sh
+```
+
+Then review and commit the changes:
+
+```zsh
 git diff
-git add -A
+git status
+git add .config/yabai/yabairc
 git commit -m "update yabai config"
 git push
+```
+
+When editing an existing linked file, editing either path changes the same
+file:
+
+```text
+~/dotfiles/.config/yabai/yabairc
+        ↕
+~/.config/yabai/yabairc
 ```
 
 ---
