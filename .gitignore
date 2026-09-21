@@ -1,0 +1,5 @@
+# OpenCode 运行时状态：含本地服务令牌，且每次重启都会变化
+.config/opencode/service.json
+
+# 密钥文件：只应存在于本机，不进入仓库
+.config/secrets/
