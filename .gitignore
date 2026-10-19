@@ -3,3 +3,6 @@
 
 # 密钥文件：只应存在于本机，不进入仓库
 .config/secrets/
+
+# macOS Finder 元数据
+.DS_Store

@@ -7,5 +7,7 @@ background-blur = 10
 
 macos-titlebar-style = hidden
 
+clipboard-paste-protection = false
+
 cursor-style = block
 shell-integration-features = no-cursor
