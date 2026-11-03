@@ -11,3 +11,6 @@
 
 # Bootstrap script
 ^/install\.sh$
+
+# macOS Finder metadata
+\.DS_Store
